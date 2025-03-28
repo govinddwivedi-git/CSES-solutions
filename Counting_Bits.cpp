@@ -35,22 +35,41 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
+int count(int n) {
+    if(n == 0) return 0;
+    if(n < 2) return 1;
+    int p = 1;
+    int c = 0;
+    while((p << 1) <= n) {
+        p = p << 1;
+        c++;
+    }
+    // cout << p << " " << c << endl;
+
+    int ans = c * (p >> 1);
+    int rem = n - p;
+    ans += (rem + 1);
+    return ans + count(rem);
+}
 
 void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
-        return;
-    }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
-    }
-    cout << "NO" << endl;
+    int n;
+    cin >> n;
+    // int ans = 0;
+    // for(int i = 1; i < 63; i++) {
+    //     int blockSize = (1LL << i);
+    //     int blocks = n / blockSize;
+    //     ans += ((blockSize/ 2) * blocks); // ek block me half 1s honge
+    //     int rem = n % blockSize;
+    //     ans += max(0LL, rem - (blockSize / 2) + 1);
 
-    
+    // }
+    // cout << ans << endl;
+
+    // Another solution
+
+    cout << count(n);
+
 }
 
 
@@ -58,7 +77,6 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
     while(t--){
         
         

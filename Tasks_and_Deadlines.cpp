@@ -37,20 +37,36 @@ const int N=2e5+5;
 
 
 void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
-        return;
+    int n;
+    cin >> n;
+    vector<pii> v;
+    for(int i=0;i<n;i++) {
+        int x, y;
+        cin >> x >> y;
+        v.emplace_back(x,y);
     }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
-    }
-    cout << "NO" << endl;
 
-    
+    sort(all(v), [&](pii a, pii b) {
+        if(a.first == b.first) return a.second < b.second;
+        return a.first < b.first;
+    });
+
+    int days = 0;
+    int ans = 0;
+
+    for(int i = 0; i < n; i++) {
+        int deadline = v[i].second;
+        int day = v[i].first;
+
+        // debug2(day,deadline);
+
+        days += day;
+
+        ans += (deadline - days);
+
+    }
+
+    cout << ans << endl;
 }
 
 
@@ -58,7 +74,6 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
     while(t--){
         
         

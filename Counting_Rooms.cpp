@@ -37,20 +37,40 @@ const int N=2e5+5;
 
 
 void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
-        return;
+    int n;
+    cin >> n;
+    int m;
+    cin >> m;
+    vector<string> arr(n);
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
     }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
-    }
-    cout << "NO" << endl;
 
-    
+    vector<vector<bool>> visited(n, vector<bool>(m, false));
+
+    function<void(int, int)> dfs = [&](int i, int j) {
+        visited[i][j] = true;
+        for(int k = 0; k < 4; k++) {
+            int x = i + dx[k];
+            int y = j + dy[k];
+            if(x >= 0 && x < n && y >= 0 && y < m && arr[x][y] == '.' && !visited[x][y]) {
+                dfs(x, y);
+            }
+        }
+    };
+
+    int cnt = 0;
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            if(arr[i][j] == '.' && !visited[i][j]) {
+                dfs(i,j);
+                cnt++;
+            }
+        }
+    }
+
+    cout << cnt << endl;
 }
 
 
@@ -58,7 +78,7 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         
         

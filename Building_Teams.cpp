@@ -37,28 +37,54 @@ const int N=2e5+5;
 
 
 void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
-        return;
-    }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
-    }
-    cout << "NO" << endl;
-
+    int n;
+    cin >> n;
+    int m;
+    cin >> m;
+    vector<int> adj[n+1];
     
+    for(int i=0; i < m; i++) {
+        int u,v;
+        cin >> u >> v;
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+
+    vector<int> colr(n+1);
+    vector<int> vis(n+1);
+    function<bool(int,int)> dfs = [&](int node, int col) {
+        vis[node] = 1;
+        colr[node] = col;
+        for(auto &it : adj[node]) {
+            if(!vis[it]) {
+                if(dfs(it,!col) == false) return false;
+            }
+            else {
+                if(colr[it] == col) return false;
+            }
+        }
+        return true;
+    };
+
+    for(int i=1;i<=n;i++) {
+        if(!vis[i]) {
+            if(dfs(i,0) == false) {
+                cout << "IMPOSSIBLE" << endl;
+                return;
+            }
+        }
+    }
+
+    for(int i=1;i<=n;i++) cout << colr[i]+1 << " ";
 }
+
 
 
 int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         
         

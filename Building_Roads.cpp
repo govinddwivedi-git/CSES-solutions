@@ -37,18 +37,41 @@ const int N=2e5+5;
 
 
 void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
-        return;
+    int n;
+    cin >> n;
+    int m;
+    cin >> m;
+    vector<int> adj[n+1];
+    
+    for(int i = 0; i < m; i++) {
+        int u,v;
+        cin >> u >> v;
+        adj[u].pb(v);
+        adj[v].pb(u);
     }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
+
+    vector<int> vis(n+1);
+
+    vector<int> start;
+
+    function<void(int)> dfs = [&] (int node) {
+        vis[node] = 1;
+        for(auto &it : adj[node]) {
+            if(!vis[it]) dfs(it);
+        }
+    };
+
+    for(int i=1;i<=n;i++) {
+        if(vis[i] == 0) {
+            start.push_back(i);
+            dfs(i);
+        }
     }
-    cout << "NO" << endl;
+
+    cout << start.size() - 1 << endl;
+    for(int i = 1; i < start.size(); i++) {
+        cout << start[i-1] << " " << start[i] << endl;
+    }
 
     
 }
@@ -58,7 +81,6 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
     while(t--){
         
         

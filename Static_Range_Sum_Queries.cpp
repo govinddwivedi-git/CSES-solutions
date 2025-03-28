@@ -37,20 +37,21 @@ const int N=2e5+5;
 
 
 void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
-        return;
+    int n;
+    cin >> n;
+    int q;
+    cin >> q;
+    vector<int> arr(n);
+    rep(i,n) cin >> arr[i];
+    vector<int> pre(n+1);
+    for(int i = 0; i <= n; i++) {
+        pre[i] = arr[i-1] + pre[i-1];
     }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
+    while(q--) {
+        int l,r;
+        cin >> l >> r;
+        cout << pre[r] - pre[l-1] << endl; 
     }
-    cout << "NO" << endl;
-
-    
 }
 
 
@@ -58,7 +59,7 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         
         

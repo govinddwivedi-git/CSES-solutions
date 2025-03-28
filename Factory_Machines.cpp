@@ -35,30 +35,48 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-
-void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
-        return;
+int check(vector<int> &arr, int mid, int t) {
+    int cnt = 0;
+    for(int i = 0; i < arr.size(); i++) {
+        cnt += (mid / arr[i]);
     }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
-    }
-    cout << "NO" << endl;
-
-    
+    return cnt >= t;
 }
 
+void solve(){
+    int n;
+    cin >> n;
+    int t;
+    cin >> t;
+
+    vec v(n);
+    rep(i,n) cin >> v[i];
+
+    sort(all(v));
+    
+    int mini = *min_element(all(v));
+
+    int start = mini;
+    int end = *min_element(all(v)) * t;
+
+    int ans = LLONG_MAX;
+
+    while(start <= end) {
+        int mid = start + (end - start) / 2;
+        if(check(v, mid, t)) {
+            ans = min(ans, mid);
+            end = mid - 1;
+        }
+        else start = mid + 1;
+    }
+
+    cout << ans << endl;
+}
 
 int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
     while(t--){
         
         

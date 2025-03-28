@@ -2,7 +2,6 @@
 using namespace std;
 
 // Macros and constants
-#define pb push_back
 #define endl ("\n")
 #define pi (3.141592653589)
 #define int long long
@@ -35,36 +34,66 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-int cnt5(int n) {
-    int cnt = 0;
-    while(n >= 5){
-        n /= 5;
-        cnt += n;
+void f1(vector<int> &arr, int cnt, int ind, int sum, unordered_map<int,int>  &leftSum) {
+    if(ind >= cnt) {
+        leftSum[sum]++;
+        return;
     }
-    return cnt;
+    sum += arr[ind];
+    f1(arr, cnt, ind + 1, sum, leftSum);
+    sum -= arr[ind];
+    f1(arr, cnt, ind + 1, sum, leftSum);
 }
 
-int cnt2(int n) {
-    int cnt = 0;
-    while(n >= 2){
-        n /= 2;
-        cnt += n;
+void f2(vector<int> &arr, int cnt, int ind, int sum, unordered_map<int,int> &rightSum, int rem) {
+    if(cnt >= rem) {
+        rightSum[sum]++;
+        return;
     }
-    return cnt;
+    if (ind < 0) return;
+    sum += arr[ind];
+    f2(arr, cnt + 1, ind - 1, sum, rightSum, rem);
+    sum -= arr[ind];
+    f2(arr, cnt + 1, ind - 1, sum, rightSum, rem);
 }
 
 void solve(){
     int n;
     cin >> n;
-    int fives = cnt5(n);
-    int twos = cnt2(n);
-    cout << min(fives, twos) << endl;
+    int x;
+    cin >> x;
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) cin >> arr[i];
+
+    int cnt = n/2;
+    int rem = n - cnt;
+    unordered_map<int,int> leftSum;
+    f1(arr, cnt, 0, 0, leftSum);
+    unordered_map<int,int> rightSum;
+
+    f2(arr, 0, n-1, 0, rightSum, rem);
+
+
+    int ans = 0;
+    for(auto &it : leftSum) {
+        int target = x - it.first;
+        if(rightSum.find(target) != rightSum.end()) {
+            ans += rightSum[target] * it.second;
+        }
+    }
+
+    cout << ans << endl;
+
+
+
 }
+
 
 int32_t main(){
     fast
 
     int t = 1;
+    // cin >> t;
     while(t--){
         
         

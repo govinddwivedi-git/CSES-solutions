@@ -37,20 +37,36 @@ const int N=2e5+5;
 
 
 void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
-        return;
-    }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
-    }
-    cout << "NO" << endl;
-
+    int n;
+    cin >> n;
+    int target;
+    cin >> target;
+    vector<pair<int,int>> arr;
     
+    rep(i,n) {
+        int x;
+        cin >> x;
+        arr.emplace_back(x,i+1);
+    }
+
+    sort(all(arr));
+    for(int i=0;i<n-3;i++) {
+        for(int j = i+1; j < n-2; j++) {
+            int start = j + 1;
+            int end = n - 1;
+            while(start < end) {
+                int sum = arr[i].first + arr[j].first + arr[start].first + arr[end].first;
+                if(sum == target) {
+                    cout << arr[i].second << " " << arr[j].second << " " << arr[start].second << " " << arr[end].second << endl;
+                    return;
+                }
+                else if(sum < target) start++;
+                else end--;
+            }
+        }
+    }
+    cout << "IMPOSSIBLE" << endl;
+
 }
 
 
@@ -58,7 +74,7 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         
         

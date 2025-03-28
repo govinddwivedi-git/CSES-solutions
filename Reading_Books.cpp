@@ -37,19 +37,43 @@ const int N=2e5+5;
 
 
 void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
-        return;
-    }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
-    }
-    cout << "NO" << endl;
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    rep(i, n) cin >> a[i];
 
+
+    sort(all(a));
+    vector<int> b = a;
+    reverse(all(b));
+
+
+    
+    7 6 4
+    6 7 
+
+    int i = 0, j = 0;
+    int sum1 = 0; 
+    int sum2 = 0;
+    while(i < n && j < n) {
+        if(sum1 + a[i] <= sum2 + b[j]) {
+            sum1 += a[i++];
+        }
+        else sum2 += b[j++];
+    }
+
+    while(i < n ) {
+         
+        sum1 += a[i++];
+        
+    }
+    while(j < n ) {
+       
+        sum2 += b[j++];
+        
+    }
+
+    cout << sum1 + sum2 << endl;
     
 }
 
@@ -58,7 +82,7 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while(t--){
         
         

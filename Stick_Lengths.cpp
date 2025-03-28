@@ -37,20 +37,17 @@ const int N=2e5+5;
 
 
 void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
-        return;
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for(auto &it : a) cin >> it;
+    sort(all(a));
+    int ans = 0;
+    for(int i = 0; i < n; i++) {
+        ans += abs(a[i] - a[n/2]);
     }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
-    }
-    cout << "NO" << endl;
+    cout << ans << endl;
 
-    
 }
 
 
@@ -58,7 +55,6 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
     while(t--){
         
         

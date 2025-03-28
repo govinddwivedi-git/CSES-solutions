@@ -37,18 +37,47 @@ const int N=2e5+5;
 
 
 void solve(){
-    int a,b;
-    cin >> a >> b;
-    if(a < b) swap(a,b);
-    if(a > b*2) {
-        cout << "NO" << endl;
+    string s;
+    cin >> s;
+    map<char,int> mp;
+    for(auto &ch : s) {
+        mp[ch]++;
+    }
+    int odd = 0;
+    int sum = 0;
+
+    for(auto &it : mp) {
+        if(it.second & 1) {
+            odd++;
+        }
+        sum += it.second;
+    }
+
+    if(odd > 1) {
+        cout << "NO SOLUTION" << endl;
         return;
     }
-    if((a+b) % 3 == 0) {
-        cout << "YES" << endl;
-        return;
+    int pos = sum / 2;
+    string ans = "";
+    char oddchar = '!';
+    for(auto &it : mp) {
+        if(it.second & 1) {
+            it.second--;
+            oddchar = it.first;
+        }
     }
-    cout << "NO" << endl;
+
+    for(auto &it : mp) {
+        ans += string(it.second/2, it.first);
+        it.second /= 2;
+    }
+
+    if(oddchar != '!') ans += oddchar;
+
+    for(auto it = mp.rbegin(); it != mp.rend(); it++) {
+        ans += string(it->second, it->first);
+    }
+    cout << ans << endl;
 
     
 }
@@ -58,7 +87,6 @@ int32_t main(){
     fast
 
     int t = 1;
-    cin >> t;
     while(t--){
         
         
