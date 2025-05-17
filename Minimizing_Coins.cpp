@@ -43,6 +43,21 @@ void solve(){
     cin >> x;
     vec arr(n);
     rep(i,n) cin >> arr[i];
+    vector<int> dp(x + 1, 1e9);
+    for(int j = 0; j <= x; j++) {
+        if(j % arr[0] == 0) {
+            dp[j] = j / arr[0]; 
+        }
+    }
+    for(int i = 1; i < n; i++) {
+        for(int j = arr[i]; j <= x; j++) {
+            int take = 1 + dp[j - arr[i]];
+            int notTake = dp[j];
+            dp[j] = min(take, notTake);
+        }
+    }
+
+    cout << (dp[x] == 1e9 ? -1 : dp[x]);
     
 }
 
