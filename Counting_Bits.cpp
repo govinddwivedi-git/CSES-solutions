@@ -35,54 +35,41 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-vector<vector<int>> dp(1002,vector<int>(1002,-1));
+int count(int n) {
+    if(n == 0) return 0;
+    if(n < 2) return 1;
+    int p = 1;
+    int c = 0;
+    while((p << 1) <= n) {
+        p = p << 1;
+        c++;
+    }
+    // cout << p << " " << c << endl;
 
-int f(int i, int j, vector<vector<char>> &arr) {
-    if(i<0 || j<0) return 0;
-    if(arr[i][j] == '*') return 0;
-    if(i == 0 && j == 0) return 1;
-    if(dp[i][j] != -1) return dp[i][j];
-    int left = f(i,j-1,arr) % mod;
-    int up = f(i-1,j,arr) % mod;
-    return dp[i][j] = (left + up) % mod;
+    int ans = c * (p >> 1);
+    int rem = n - p;
+    ans += (rem + 1);
+    return ans + count(rem);
 }
 
 void solve(){
     int n;
     cin >> n;
-    vector<vector<char>> v(n,vector<char>(n));
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            cin >> v[i][j];
-        }
-    } 
-    if(v[0][0] == '*' || v[n-1][n-1] == '*') {
-        cout << 0;
-        return;
-    }
-    // cout << f(n-1,n-1,v);
+    // int ans = 0;
+    // for(int i = 1; i < 63; i++) {
+    //     int blockSize = (1LL << i);
+    //     int blocks = n / blockSize;
+    //     ans += ((blockSize/ 2) * blocks); // ek block me half 1s honge
+    //     int rem = n % blockSize;
+    //     ans += max(0LL, rem - (blockSize / 2) + 1);
 
-    dp[0][0] = 1;
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            if(i == 0 && j == 0) continue;
-            int down = 0;
-            if(i > 0) {
-                down = dp[i - 1][j];
-            }
-            int right = 0;
-            if(j > 0) {
-                right = dp[i][j - 1];
-            }
+    // }
+    // cout << ans << endl;
 
-            dp[i][j] = (down + right) % mod;
-            if(v[i][j] == '*') dp[i][j] = 0;
-        }
-    }
+    // Another solution
 
-    cout << dp[n-1][n-1];
+    cout << count(n);
 
-    
 }
 
 
@@ -90,7 +77,6 @@ int32_t main(){
     fast
 
     int t = 1;
-    // cin >> t;
     while(t--){
         
         

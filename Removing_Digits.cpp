@@ -54,10 +54,33 @@ int f(int n) {
     return dp[temp] = ans;
 }
 
+vector<int> getDigits(int n) {
+    vector<int> digits;
+    while(n){
+        int d = n % 10;
+        n /= 10;
+        if(d) digits.push_back(d);
+    }
+
+    return digits;
+}
+
 void solve(){
     int n;
     cin >> n;
-    cout << f(n) << endl;
+    vector<int> dp(n + 1, 1e9);
+    for(int i = 1; i <= min(n, 9ll); i++) {
+        dp[i] = 1;
+    }
+    for(int i = 10; i <= n; i++) {
+        vector<int> dig = getDigits(i);
+        for(auto d : dig) {
+            dp[i] = min(dp[i], dp[i - d] + 1);
+        }
+    }
+
+    cout << dp[n];
+    // cout << f(n) << endl;
     
 }
 

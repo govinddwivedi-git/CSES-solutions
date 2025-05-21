@@ -2,7 +2,6 @@
 using namespace std;
 
 // Macros and constants
-#define pb push_back
 #define endl ("\n")
 #define pi (3.141592653589)
 #define int long long
@@ -35,75 +34,23 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-// vector<vector<int>> dp(1005, vector<int>(100005,-1));
-
-// int f(int ind, vec &price, vec &pages, int x) {
-//     if(x == 0) return 0;
-//     if(ind == 0) {
-//         if(price[ind] <= x) return pages[ind];
-//         return 0;
-//     } 
-//     if(dp[ind][x] != -1) return dp[ind][x];
-//     int nt = f(ind-1, price, pages, x);
-//     int t = 0;
-//     if(price[ind] <= x) {
-//         t = pages[ind] + f(ind-1,price,pages,x-price[ind]);
-//     }
-
-//     return dp[ind][x] = max(nt, t);
-// }
-
-// giving runtime error
-
 
 void solve(){
-    int n;
-    cin >> n;
-    int x;
-    cin >> x;
-    vec price(n);
-    vec pages(n);
+    int n, x;
+    cin >> n >> x;
+    vector<int> pages(n), price(n);
+    for(int i = 0; i < n; i++) cin >> price[i];
+    for(int i = 0; i < n; i++) cin >> pages[i];
 
-    rep(i,n) cin >> price[i];
-    rep(i,n) cin >> pages[i];
-
-    // cout << f(n-1,price,pages,x);
-
-
-    // vector<vec> dp(n,vector<int>(x+1)); runtime error
-    vec prev(x+1);
-
-
-    for(int j=0; j<=x; j++) {
-        prev[j] = (j >= price[0]) ? pages[0] : 0;
-    }
-    
-    for(int i=1;i<n;i++) {
-        vec curr(x+1);
-        for(int j=0;j<=x;j++) {
-            int nt = prev[j];
-            int t = 0;
-            if(price[i] <= j) t = pages[i] + prev[j - price[i]];
-            curr[j] = max(t, nt);
+    vector<int> dp(x+1);
+    for(int i = 0; i < n; i++) {
+        for(int j = x; j >= price[i]; j--) {
+            dp[j] = max(dp[j], dp[j - price[i]] + pages[i]);
         }
-        prev = curr;
     }
 
-    cout << prev[x];
-
-
-    // vector<int> dp(x + 1, 0);
-    // for(int i = 0; i < n; i++){
-    //     for(int cost = x; cost >= price[i]; cost--){
-    //         dp[cost] = max(dp[cost], dp[cost - price[i]] + pages[i]);
-    //     }
-    // }
-    // cout << dp[x];
-
-
-
-
-
+    cout << dp[x];
+    
 }
 
 

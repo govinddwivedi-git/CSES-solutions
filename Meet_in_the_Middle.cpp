@@ -2,7 +2,6 @@
 using namespace std;
 
 // Macros and constants
-#define pb push_back
 #define endl ("\n")
 #define pi (3.141592653589)
 #define int long long
@@ -35,54 +34,58 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-vector<vector<int>> dp(1002,vector<int>(1002,-1));
+void f1(vector<int> &arr, int cnt, int ind, int sum, unordered_map<int,int>  &leftSum) {
+    if(ind >= cnt) {
+        leftSum[sum]++;
+        return;
+    }
+    sum += arr[ind];
+    f1(arr, cnt, ind + 1, sum, leftSum);
+    sum -= arr[ind];
+    f1(arr, cnt, ind + 1, sum, leftSum);
+}
 
-int f(int i, int j, vector<vector<char>> &arr) {
-    if(i<0 || j<0) return 0;
-    if(arr[i][j] == '*') return 0;
-    if(i == 0 && j == 0) return 1;
-    if(dp[i][j] != -1) return dp[i][j];
-    int left = f(i,j-1,arr) % mod;
-    int up = f(i-1,j,arr) % mod;
-    return dp[i][j] = (left + up) % mod;
+void f2(vector<int> &arr, int cnt, int ind, int sum, unordered_map<int,int> &rightSum, int rem) {
+    if(cnt >= rem) {
+        rightSum[sum]++;
+        return;
+    }
+    if (ind < 0) return;
+    sum += arr[ind];
+    f2(arr, cnt + 1, ind - 1, sum, rightSum, rem);
+    sum -= arr[ind];
+    f2(arr, cnt + 1, ind - 1, sum, rightSum, rem);
 }
 
 void solve(){
     int n;
     cin >> n;
-    vector<vector<char>> v(n,vector<char>(n));
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            cin >> v[i][j];
-        }
-    } 
-    if(v[0][0] == '*' || v[n-1][n-1] == '*') {
-        cout << 0;
-        return;
-    }
-    // cout << f(n-1,n-1,v);
+    int x;
+    cin >> x;
+    vector<int> arr(n);
+    for(int i = 0; i < n; i++) cin >> arr[i];
 
-    dp[0][0] = 1;
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            if(i == 0 && j == 0) continue;
-            int down = 0;
-            if(i > 0) {
-                down = dp[i - 1][j];
-            }
-            int right = 0;
-            if(j > 0) {
-                right = dp[i][j - 1];
-            }
+    int cnt = n/2;
+    int rem = n - cnt;
+    unordered_map<int,int> leftSum;
+    f1(arr, cnt, 0, 0, leftSum);
+    unordered_map<int,int> rightSum;
 
-            dp[i][j] = (down + right) % mod;
-            if(v[i][j] == '*') dp[i][j] = 0;
+    f2(arr, 0, n-1, 0, rightSum, rem);
+
+
+    int ans = 0;
+    for(auto &it : leftSum) {
+        int target = x - it.first;
+        if(rightSum.find(target) != rightSum.end()) {
+            ans += rightSum[target] * it.second;
         }
     }
 
-    cout << dp[n-1][n-1];
+    cout << ans << endl;
 
-    
+
+
 }
 
 

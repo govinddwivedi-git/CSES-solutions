@@ -35,52 +35,43 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-vector<vector<int>> dp(1002,vector<int>(1002,-1));
-
-int f(int i, int j, vector<vector<char>> &arr) {
-    if(i<0 || j<0) return 0;
-    if(arr[i][j] == '*') return 0;
-    if(i == 0 && j == 0) return 1;
-    if(dp[i][j] != -1) return dp[i][j];
-    int left = f(i,j-1,arr) % mod;
-    int up = f(i-1,j,arr) % mod;
-    return dp[i][j] = (left + up) % mod;
-}
 
 void solve(){
     int n;
     cin >> n;
-    vector<vector<char>> v(n,vector<char>(n));
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            cin >> v[i][j];
-        }
-    } 
-    if(v[0][0] == '*' || v[n-1][n-1] == '*') {
-        cout << 0;
-        return;
-    }
-    // cout << f(n-1,n-1,v);
-
-    dp[0][0] = 1;
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            if(i == 0 && j == 0) continue;
-            int down = 0;
-            if(i > 0) {
-                down = dp[i - 1][j];
-            }
-            int right = 0;
-            if(j > 0) {
-                right = dp[i][j - 1];
-            }
-
-            dp[i][j] = (down + right) % mod;
-            if(v[i][j] == '*') dp[i][j] = 0;
-        }
+    int m;
+    cin >> m;
+    vector<int> adj[n+1];
+    
+    for(int i = 0; i < m; i++) {
+        int u,v;
+        cin >> u >> v;
+        adj[u].pb(v);
+        adj[v].pb(u);
     }
 
-    cout << dp[n-1][n-1];
+    vector<int> vis(n+1);
+
+    vector<int> start;
+
+    function<void(int)> dfs = [&] (int node) {
+        vis[node] = 1;
+        for(auto &it : adj[node]) {
+            if(!vis[it]) dfs(it);
+        }
+    };
+
+    for(int i=1;i<=n;i++) {
+        if(vis[i] == 0) {
+            start.push_back(i);
+            dfs(i);
+        }
+    }
+
+    cout << start.size() - 1 << endl;
+    for(int i = 1; i < start.size(); i++) {
+        cout << start[i-1] << " " << start[i] << endl;
+    }
 
     
 }
@@ -90,7 +81,6 @@ int32_t main(){
     fast
 
     int t = 1;
-    // cin >> t;
     while(t--){
         
         

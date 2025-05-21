@@ -37,8 +37,19 @@ const int N=2e5+5;
 
 
 void solve(){
-    int n;
-    cin >> n;
+    int a,b;
+    cin >> a >> b;
+    if(a < b) swap(a,b);
+    if(a > b*2) {
+        cout << "NO" << endl;
+        return;
+    }
+    if((a+b) % 3 == 0) {
+        cout << "YES" << endl;
+        return;
+    }
+    cout << "NO" << endl;
+
     
 }
 

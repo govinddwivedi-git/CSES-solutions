@@ -35,13 +35,31 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
+int cnt5(int n) {
+    int cnt = 0;
+    while(n >= 5){
+        n /= 5;
+        cnt += n;
+    }
+    return cnt;
+}
+
+int cnt2(int n) {
+    int cnt = 0;
+    while(n >= 2){
+        n /= 2;
+        cnt += n;
+    }
+    return cnt;
+}
 
 void solve(){
     int n;
     cin >> n;
-    
+    int fives = cnt5(n);
+    int twos = cnt2(n);
+    cout << min(fives, twos) << endl;
 }
-
 
 int32_t main(){
     fast

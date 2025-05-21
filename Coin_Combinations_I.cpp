@@ -37,9 +37,28 @@ const int N=2e5+5;
 
 
 void solve(){
-    int n;
-    cin >> n;
+    int n, x;
+    cin >> n >> x;
+    vector<int> coins(n);
+    for(int i = 0; i < n; i++) {
+        cin >> coins[i];
+    }
+
+    vector<int> dp(x + 1, 0);
+    dp[0] = 1;
     
+    // For each sum
+    for(int j = 1; j <= x; j++) {
+        // For each coin
+        for(int i = 0; i < n; i++) {
+            if(coins[i] <= j) {
+                dp[j] = (dp[j] + dp[j - coins[i]]) % mod;
+            }
+        }
+    }
+    
+    // for(auto i : dp) cout << i << " ";
+    cout << dp[x];
 }
 
 
