@@ -7,7 +7,6 @@ using namespace std;
 #define int long long
 #define float double
 #define pb push_back
-#define mp make_pair
 #define ff first
 #define ss second
 #define all(c) c.begin(), c.end()
@@ -35,53 +34,32 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-// int f(string &s, set<string> &st, int ind, vector<int> &dp) {
-//     int n = s.size();
-//     if(ind == n) return 1;
-//     if(dp[ind] != -1) return dp[ind];
-
-//     string temp = "";
-//     int cnt = 0;
-//     for(int i = ind; i < n; i++) {
-//         temp += s[i];
-//         if(st.find(temp) != st.end()) {
-//             cnt = (cnt + f(s, st, i + 1, dp)) % mod;
-//         }
-//     }
-
-//     return dp[ind] = cnt;
-// }
-
-
 void solve(){
-    string s;
-    cin >> s;
-    int n;
-    cin >> n;
-    set<string> st;
-    for(int i = 0; i < n; i++) {
-        string t;
-        cin >> t;
-        st.insert(t);
+    int n, m;
+    cin >> n >> m;
+    vector<int> prices(n);
+    for(int i = 0; i < n; i++) cin >> prices[i];
+    vector<int> peoples(m);
+    for(int i = 0; i < m; i++) cin >> peoples[i];
+    
+    map<int,int> mp;
+    for(auto &i : prices) {
+        mp[i]++;
     }
 
-    vector<int> dp(s.size(), 0);
-    int m = s.size();
-    dp[m] = 1;
-    for(int ind = m - 1; ind >= 0; ind--) {
-        string temp = "";
-        int cnt = 0;
-        for(int i = ind; i < m; i++) {
-            temp += s[i];
-            if(st.find(temp) != st.end()) {
-                cnt = (cnt + dp[i + 1]) % mod;
-            }
+    for(int i = 0; i < m; i++) {
+        int element = peoples[i];
+        auto it = mp.upper_bound(element);
+        if(it == mp.begin()) {
+            cout << -1 << endl;
+            continue;
         }
-
-        dp[ind] = cnt;
+        --it;
+        int x = it->first;
+        mp[x]--;
+        cout << x << endl;
+        if(mp[x] == 0) mp.erase(x);
     }
-    int ans = dp[0];
-    cout << ans;
     
 }
 

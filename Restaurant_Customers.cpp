@@ -35,55 +35,72 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-// int f(string &s, set<string> &st, int ind, vector<int> &dp) {
-//     int n = s.size();
-//     if(ind == n) return 1;
-//     if(dp[ind] != -1) return dp[ind];
-
-//     string temp = "";
-//     int cnt = 0;
-//     for(int i = ind; i < n; i++) {
-//         temp += s[i];
-//         if(st.find(temp) != st.end()) {
-//             cnt = (cnt + f(s, st, i + 1, dp)) % mod;
-//         }
-//     }
-
-//     return dp[ind] = cnt;
-// }
-
-
 void solve(){
-    string s;
-    cin >> s;
     int n;
     cin >> n;
-    set<string> st;
+    vector<pair<int, int>> arr;
     for(int i = 0; i < n; i++) {
-        string t;
-        cin >> t;
-        st.insert(t);
+        int u, v;
+        cin >> u >> v;
+        arr.push_back({u, v});
     }
 
-    vector<int> dp(s.size(), 0);
-    int m = s.size();
-    dp[m] = 1;
-    for(int ind = m - 1; ind >= 0; ind--) {
-        string temp = "";
-        int cnt = 0;
-        for(int i = ind; i < m; i++) {
-            temp += s[i];
-            if(st.find(temp) != st.end()) {
-                cnt = (cnt + dp[i + 1]) % mod;
-            }
+    vector<int> start(n), end(n);
+    for(int i = 0; i < n; i++) {
+        int u = arr[i].first;
+        int v = arr[i].second;
+        start[i] = u, end[i] = v;
+    }
+
+    sort(all(start));
+    sort(all(end));
+
+    int s = 0;
+    int e = 0;
+    int cnt = 0, ans = 0;
+    while(s < n && e < n) {
+        if(start[s] <= end[e]) {
+            cnt++;
+            ans = max(ans, cnt);
+            s++;
         }
-
-        dp[ind] = cnt;
+        else e++, cnt--;
     }
-    int ans = dp[0];
-    cout << ans;
-    
+
+    cout << ans << endl;
 }
+
+
+
+
+
+// void solve(){
+//     int n;
+//     cin >> n;
+//     vector<pair<int, int>> arr;
+//     for(int i = 0; i < n; i++) {
+//         int u, v;
+//         cin >> u >> v;
+//         arr.push_back({u, v});
+//     }
+
+//     map<int,int> mpp;
+//     for(int i = 0; i < n; i++) {
+//         int u = arr[i].first;
+//         int v = arr[i].second;
+//         mpp[u]++;
+//         mpp[v + 1]--;
+//     }
+
+//     int sum = 0;
+//     int ans = 0;
+//     for(auto &it : mpp) {
+//         sum += it.second;
+//         ans = max(ans, sum);
+//     }
+
+//     cout << ans << endl;
+// }
 
 
 int32_t main(){

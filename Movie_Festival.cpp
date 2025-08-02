@@ -35,54 +35,31 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-// int f(string &s, set<string> &st, int ind, vector<int> &dp) {
-//     int n = s.size();
-//     if(ind == n) return 1;
-//     if(dp[ind] != -1) return dp[ind];
-
-//     string temp = "";
-//     int cnt = 0;
-//     for(int i = ind; i < n; i++) {
-//         temp += s[i];
-//         if(st.find(temp) != st.end()) {
-//             cnt = (cnt + f(s, st, i + 1, dp)) % mod;
-//         }
-//     }
-
-//     return dp[ind] = cnt;
-// }
-
-
 void solve(){
-    string s;
-    cin >> s;
+    
     int n;
     cin >> n;
-    set<string> st;
+    vector<pair<int, int>> arr;
     for(int i = 0; i < n; i++) {
-        string t;
-        cin >> t;
-        st.insert(t);
+        int u, v;
+        cin >> u >> v;
+        arr.push_back({u, v});
     }
 
-    vector<int> dp(s.size(), 0);
-    int m = s.size();
-    dp[m] = 1;
-    for(int ind = m - 1; ind >= 0; ind--) {
-        string temp = "";
-        int cnt = 0;
-        for(int i = ind; i < m; i++) {
-            temp += s[i];
-            if(st.find(temp) != st.end()) {
-                cnt = (cnt + dp[i + 1]) % mod;
-            }
+    sort(all(arr), [&](pii &a, pii &b) {
+        return a.second < b.second;
+    });
+
+    int last = arr[0].second;
+    int ans = 1;
+    for(int i = 1; i < n; i++) {
+        if(arr[i].first >= last) {
+            last = arr[i].second;
+            ans++;
         }
-
-        dp[ind] = cnt;
     }
-    int ans = dp[0];
+
     cout << ans;
-    
 }
 
 

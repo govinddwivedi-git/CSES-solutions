@@ -35,54 +35,54 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-// int f(string &s, set<string> &st, int ind, vector<int> &dp) {
-//     int n = s.size();
-//     if(ind == n) return 1;
-//     if(dp[ind] != -1) return dp[ind];
-
-//     string temp = "";
-//     int cnt = 0;
-//     for(int i = ind; i < n; i++) {
-//         temp += s[i];
-//         if(st.find(temp) != st.end()) {
-//             cnt = (cnt + f(s, st, i + 1, dp)) % mod;
-//         }
-//     }
-
-//     return dp[ind] = cnt;
-// }
-
-
 void solve(){
-    string s;
-    cin >> s;
-    int n;
-    cin >> n;
-    set<string> st;
-    for(int i = 0; i < n; i++) {
-        string t;
-        cin >> t;
-        st.insert(t);
+    int n, m; 
+    cin >> n >> m;
+    vector<vector<pii>> adj(n + 1);
+    for(int i = 0; i < m; i++) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].push_back({v, w});
     }
 
-    vector<int> dp(s.size(), 0);
-    int m = s.size();
-    dp[m] = 1;
-    for(int ind = m - 1; ind >= 0; ind--) {
-        string temp = "";
-        int cnt = 0;
-        for(int i = ind; i < m; i++) {
-            temp += s[i];
-            if(st.find(temp) != st.end()) {
-                cnt = (cnt + dp[i + 1]) % mod;
+    vector<vector<int>> dist(n + 1, vector<int>(2, 1e18));
+
+    priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int,int>>>, greater<>> pq;
+    
+    dist[1][0] = 0;  
+    pq.push({0, {1, 0}});
+
+    while(!pq.empty()) {
+        auto top = pq.top();
+        pq.pop();
+
+        int d = top.first;
+        int node = top.second.first;
+        int choice = top.second.second;
+
+        if(d > dist[node][choice]) continue;
+
+        for(auto &it : adj[node]) {
+            int v = it.first;
+            int w = it.second;
+
+
+            if(d + w < dist[v][choice]) {
+                dist[v][choice] = d + w;
+                pq.push({dist[v][choice], {v, choice}});
+            }
+
+            if(choice == 0) {
+                int ww = w / 2;
+                if(d + ww < dist[v][1]) {
+                    dist[v][1] = d + ww;
+                    pq.push({dist[v][1], {v, 1}});
+                }
             }
         }
-
-        dp[ind] = cnt;
     }
-    int ans = dp[0];
-    cout << ans;
-    
+
+    cout << min(dist[n][0], dist[n][1]);
 }
 
 
