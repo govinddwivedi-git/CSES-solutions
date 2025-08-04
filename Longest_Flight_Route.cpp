@@ -38,15 +38,12 @@ const int N=2e5+5;
 void solve(){
     int n, m; 
     cin >> n >> m;
-    vector<vector<pii>> adj(n + 1);
+    vector<vector<int>> adj(n + 1);
     for(int i = 0; i < m; i++) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        adj[u].push_back({v, w});
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
     }
-
-    
-
     
 }
 

@@ -36,8 +36,9 @@ const int N=2e5+5;
 
 
 void solve(){
-    int n, m; 
-    cin >> n >> m;
+    int n, m, k;
+    cin >> n >> m >> k;
+
     vector<vector<pii>> adj(n + 1);
     for(int i = 0; i < m; i++) {
         int u, v, w;
@@ -45,8 +46,50 @@ void solve(){
         adj[u].push_back({v, w});
     }
 
-    
+    vector<priority_queue<int>> dp(n + 1);
 
+    priority_queue<pii, vector<pii>, greater<>> pq;
+    pq.push({0, 1});
+    dp[1].push(0);
+
+    while(!pq.empty()) {
+        auto p = pq.top();
+        pq.pop();
+
+        int dist = p.first;
+        int u = p.second;
+
+        if(dp[u].size() == k && dist > dp[u].top()) continue;
+
+        for(auto &it : adj[u]) {
+            int v = it.first;
+            int w = it.second;
+
+            int newD = dist + w;
+
+            if(dp[v].size() < k) {
+                dp[v].push(newD);
+                pq.push({newD, v});
+            }
+
+            else if(newD < dp[v].top()) {
+                dp[v].pop();
+                dp[v].push(newD);
+                pq.push({newD, v});
+            }
+        }
+    }
+
+    vector<int> ans;
+    while(!dp[n].empty()) {
+        ans.push_back(dp[n].top());
+        dp[n].pop();
+    }
+
+    sort(all(ans));
+
+    for(int i = 0; i < k; i++) 
+        cout << ans[i] << " ";
     
 }
 

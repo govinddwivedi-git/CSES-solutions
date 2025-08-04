@@ -45,8 +45,47 @@ void solve(){
         adj[u].push_back({v, w});
     }
 
-    
+    vector<int> dist(n + 1, 1e18);
+    vector<int> count(n + 1, 0);
+    vector<int> minEdge(n + 1, 1e18);    
+    vector<int> maxEdge(n + 1, -1e18);    
 
+
+    priority_queue<pii, vector<pii>, greater<>> pq;
+    pq.push({0, 1});
+    dist[1] = 0;
+    count[1] = 1;
+    minEdge[1] = 0;
+    maxEdge[1] = 0; 
+
+    while(!pq.empty()) {
+        pii p = pq.top();
+        pq.pop();
+
+        int d = p.first;
+        int node = p.second;
+
+        if(d > dist[node]) continue;
+
+        for(auto &i : adj[node]) {
+            int v = i.first, wt = i.second;
+            if(d + wt < dist[v]) {
+                dist[v] = d + wt;
+                count[v] = count[node];
+                pq.push({dist[v], v});
+                minEdge[v] = minEdge[node] + 1;
+                maxEdge[v] = maxEdge[node] + 1;
+
+            }
+            else if(d + wt == dist[v]) {
+                count[v] = (count[v] + count[node]) % mod;
+                minEdge[v] = min(minEdge[v], minEdge[node] + 1);
+                maxEdge[v] = max(maxEdge[v], maxEdge[node] + 1);
+            }
+        }
+    }
+
+    cout << dist[n] << " " << count[n] << " " << minEdge[n] << " " << maxEdge[n];
     
 }
 

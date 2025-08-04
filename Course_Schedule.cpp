@@ -36,16 +36,42 @@ const int N=2e5+5;
 
 
 void solve(){
-    int n, m; 
+    int n, m;
     cin >> n >> m;
-    vector<vector<pii>> adj(n + 1);
+    vector<int> indegree(n + 1);
+    vector<vector<int>> adj(n + 1);
     for(int i = 0; i < m; i++) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        adj[u].push_back({v, w});
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        indegree[v]++;
     }
 
-    
+    queue<int> q;
+    for(int i = 1; i <= n; i++) {
+        if(indegree[i] == 0) q.push(i);
+    }
+
+    vector<int> topoSort;
+    while(!q.empty()) {
+        int node = q.front();
+        q.pop();
+        topoSort.push_back(node);
+        for(auto &v : adj[node]) {
+            indegree[v]--;
+            if(indegree[v] == 0) {
+                q.push(v);
+            }
+        }
+    }
+
+    if(topoSort.size() != n) {
+        cout << "IMPOSSIBLE" << endl;
+        return;
+    }
+
+    for(auto &i : topoSort) cout << i << " ";
+
 
     
 }
