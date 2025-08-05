@@ -34,27 +34,6 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-// int dfs(vector<int> &dp, vector<int> &pathVis, vector<int> &parent, int node, vector<vector<int>> &adj) {
-
-//     if(dp[node] != -1e9) return dp[node];
-//     pathVis[node] = 1;
-
-//     int best = -1e9;
-//     for(auto &v : adj[node]) {
-//         int temp = dfs(dp, pathVis, parent, v, adj);
-//         if(temp > best) {
-//             best = temp;
-//             parent[node] = v;
-//         }
-//     }
-
-//     pathVis[node] = 0;
-//     if(best != -1e9) return dp[node] = 1 + best;
-
-//     return dp[node] = best; 
-
-
-// }
 
 
 void solve(){
@@ -87,71 +66,30 @@ void solve(){
         }
     }
 
-    vector<int> dp(n + 1, -1e9);
-    dp[1] = 0;
+    vector<int> dp(n + 1, 0);
+    dp[1] = 1;
 
     vector<int> parent(n + 1, -1);
     
     for(int i : topoSort) {
         for(auto &v : adj[i]) {
-            if(dp[v] < 1 + dp[i]) {
-                dp[v] = 1 + dp[i];
-                parent[v] = i;
-            }
+            dp[v] = (dp[i] + dp[v]) % mod;
         }
     }
 
-    if(dp[n] < 0) {
-        cout << "IMPOSSIBLE";
-        return;
-    }
-
-    int last = n;
-    vector<int> path;
-
-    while(last != -1) {
-        path.push_back(last);
-        last = parent[last];
-    }
-
-    reverse(all(path));
-
-    cout << path.size() << endl;
-    for(int i : path) cout << i << " ";
-    cout << endl;
-
-
-
-
-
-
-
-
-
-    // vector<int> parent(n + 1, -1);
-    // vector<int> pathVis(n + 1);
-    // vector<int> dp(n + 1, -1e9);
-
-    // dp[n] = 0;
-
-    // int ans = dfs(dp, pathVis, parent, 1, adj);
-    // if(ans < 0) {
-    //     cout << "IMPOSSIBLE" << endl;
-    //     return;
-    // } 
-
-    // vector<int> path;
-    // path.push_back(1);
-    // int last = parent[1];
-    // while(last != -1) {
-    //     path.push_back(last);
-    //     last = parent[last];
-    // }
-
-    // cout << path.size() << endl;
-    // for(auto &i : path) cout << i << " ";
-    // cout << endl;
     
+
+    cout << dp[n] << endl;
+
+
+
+
+
+
+
+
+
+  
 }
 
 
