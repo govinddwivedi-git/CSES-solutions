@@ -35,54 +35,33 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-void dfs(int u, vector<int> &next, vector<int> &vis, vector<int> &pathVis, vector<int> &dist) {
-    vis[u] = 1;
-    pathVis[u] = 1;
-    int v = next[u];
-    if(!vis[v]) {
-        dfs(v, next, vis, pathVis, dist);
-    }
-    else if(pathVis[v]) {
-        int curr = v;
-        int csize = 1;
-        while(next[curr] != v) {
-            curr = next[curr];
-            csize++;
+int countSubArraysWithSumLessThanK(int k, vector<int> &arr) {
+    int cnt = 0, start = 0, end = 0;
+    int n = arr.size();
+    int sum = 0;
+    while(end < n) {
+        sum += arr[end];
+        while(sum > k && start <= end) {
+            sum -= arr[start++];
         }
 
-        curr = v;
-        dist[curr] = csize;
-        while(next[curr] != v) {
-            curr = next[curr];
-            dist[curr] = csize; 
-        }
+        cnt += (end - start + 1);
+        end++;
     }
 
-    if(dist[u] == 0) dist[u] = dist[v] + 1;
-    pathVis[u] = 0;
-
-    return;
+    return cnt;
 }
 
 void solve(){
-    int n;
-    cin >> n;
-    vector<int> next(n + 1);
-    for(int i = 1; i <= n; i++) {
-        cin >> next[i];
-    }
+    int n, k;
+    cin >> n >> k;
+    vector<int> arr(n);
+    for(int &i : arr) cin >> i;
 
-    vector<int> vis(n + 1);
-    vector<int> pathVis(n + 1);
-    vector<int> dist(n + 1);
+    int ans = countSubArraysWithSumLessThanK(k, arr) - countSubArraysWithSumLessThanK(k - 1, arr);
+    cout << ans << endl;
     
-
-    for(int i = 1; i <= n; i++) {
-        if(!vis[i]) dfs(i, next, vis, pathVis, dist);
-    }
     
-    for(int i = 1; i <= n; i++) cout << dist[i] << " ";
-    cout << "\n";
 }
 
 

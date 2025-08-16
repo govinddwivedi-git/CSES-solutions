@@ -34,55 +34,35 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-
-void dfs(int u, vector<int> &next, vector<int> &vis, vector<int> &pathVis, vector<int> &dist) {
-    vis[u] = 1;
-    pathVis[u] = 1;
-    int v = next[u];
-    if(!vis[v]) {
-        dfs(v, next, vis, pathVis, dist);
-    }
-    else if(pathVis[v]) {
-        int curr = v;
-        int csize = 1;
-        while(next[curr] != v) {
-            curr = next[curr];
-            csize++;
-        }
-
-        curr = v;
-        dist[curr] = csize;
-        while(next[curr] != v) {
-            curr = next[curr];
-            dist[curr] = csize; 
-        }
-    }
-
-    if(dist[u] == 0) dist[u] = dist[v] + 1;
-    pathVis[u] = 0;
-
-    return;
-}
-
 void solve(){
     int n;
     cin >> n;
-    vector<int> next(n + 1);
-    for(int i = 1; i <= n; i++) {
-        cin >> next[i];
+
+
+    // ! Difficult question 
+    
+    vector<string> gray = {"0", "1"};
+    for (int bits = 2; bits <= n; ++bits) {
+        vector<string> rev(gray.rbegin(), gray.rend()); // reversed list
+
+        // prefix 0 to first half
+        for (string &code : gray) {
+            code = "0" + code;
+        }
+
+        // prefix 1 to reversed half
+        for (string &code : rev) {
+            code = "1" + code;
+        }
+
+        // merge both halves
+        gray.insert(gray.end(), rev.begin(), rev.end());
     }
 
-    vector<int> vis(n + 1);
-    vector<int> pathVis(n + 1);
-    vector<int> dist(n + 1);
-    
-
-    for(int i = 1; i <= n; i++) {
-        if(!vis[i]) dfs(i, next, vis, pathVis, dist);
+    for (auto &code : gray) {
+        cout << code << "\n";
     }
     
-    for(int i = 1; i <= n; i++) cout << dist[i] << " ";
-    cout << "\n";
 }
 
 

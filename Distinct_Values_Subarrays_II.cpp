@@ -35,54 +35,29 @@ const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
 
-void dfs(int u, vector<int> &next, vector<int> &vis, vector<int> &pathVis, vector<int> &dist) {
-    vis[u] = 1;
-    pathVis[u] = 1;
-    int v = next[u];
-    if(!vis[v]) {
-        dfs(v, next, vis, pathVis, dist);
-    }
-    else if(pathVis[v]) {
-        int curr = v;
-        int csize = 1;
-        while(next[curr] != v) {
-            curr = next[curr];
-            csize++;
-        }
-
-        curr = v;
-        dist[curr] = csize;
-        while(next[curr] != v) {
-            curr = next[curr];
-            dist[curr] = csize; 
-        }
-    }
-
-    if(dist[u] == 0) dist[u] = dist[v] + 1;
-    pathVis[u] = 0;
-
-    return;
-}
-
 void solve(){
-    int n;
-    cin >> n;
-    vector<int> next(n + 1);
-    for(int i = 1; i <= n; i++) {
-        cin >> next[i];
+    int n, k;
+    cin >> n >> k;
+    vector<int> arr(n);
+    for(auto &i : arr) cin >> i;
+
+    map<int, int> freq;
+    int start = 0, end = 0;
+    int cnt = 0;
+
+    while(end < n) {
+        int val = arr[end];
+        freq[val]++;
+        while(freq.size() > k) {
+            int element = arr[start++];
+            freq[element]--;
+            if(freq[element] == 0) freq.erase(element);
+        }
+        cnt += (end - start + 1);
+        end++;
     }
 
-    vector<int> vis(n + 1);
-    vector<int> pathVis(n + 1);
-    vector<int> dist(n + 1);
-    
-
-    for(int i = 1; i <= n; i++) {
-        if(!vis[i]) dfs(i, next, vis, pathVis, dist);
-    }
-    
-    for(int i = 1; i <= n; i++) cout << dist[i] << " ";
-    cout << "\n";
+    cout << cnt << endl;
 }
 
 

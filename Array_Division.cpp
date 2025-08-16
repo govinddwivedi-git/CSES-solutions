@@ -34,55 +34,37 @@ const int mod = 1e9+7;
 const int dx[4]{1, 0, -1, 0}, dy[4]{0, 1, 0, -1};  // for every grid problem!!
 const int N=2e5+5;
 
-
-void dfs(int u, vector<int> &next, vector<int> &vis, vector<int> &pathVis, vector<int> &dist) {
-    vis[u] = 1;
-    pathVis[u] = 1;
-    int v = next[u];
-    if(!vis[v]) {
-        dfs(v, next, vis, pathVis, dist);
-    }
-    else if(pathVis[v]) {
-        int curr = v;
-        int csize = 1;
-        while(next[curr] != v) {
-            curr = next[curr];
-            csize++;
+bool check(vector<int> &arr, int mid, int k) {
+    int sum = 0;
+    int cnt = 1;
+    for(int i = 0; i < arr.size(); i++) {
+        if(sum + arr[i] <= mid)  sum += arr[i];
+        else {
+            cnt += 1;
+            sum = arr[i];
         }
 
-        curr = v;
-        dist[curr] = csize;
-        while(next[curr] != v) {
-            curr = next[curr];
-            dist[curr] = csize; 
-        }
+        if(cnt > k) return false;
     }
-
-    if(dist[u] == 0) dist[u] = dist[v] + 1;
-    pathVis[u] = 0;
-
-    return;
+    return true;
 }
 
 void solve(){
-    int n;
-    cin >> n;
-    vector<int> next(n + 1);
-    for(int i = 1; i <= n; i++) {
-        cin >> next[i];
+    int n, k;
+    cin >> n >> k;
+    vector<int> arr(n);
+    for(int &i : arr) cin >> i;
+    
+    int start = *max_element(all(arr)), end = accumulate(all(arr), 0ll);
+    while(start <= end) {
+        int mid = start + (end - start) / 2;
+        if(check(arr, mid, k)) end = mid - 1;
+        else start = mid + 1;
     }
 
-    vector<int> vis(n + 1);
-    vector<int> pathVis(n + 1);
-    vector<int> dist(n + 1);
-    
+    cout << start;
 
-    for(int i = 1; i <= n; i++) {
-        if(!vis[i]) dfs(i, next, vis, pathVis, dist);
-    }
     
-    for(int i = 1; i <= n; i++) cout << dist[i] << " ";
-    cout << "\n";
 }
 
 
